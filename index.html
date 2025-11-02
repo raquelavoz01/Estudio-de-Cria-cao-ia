@@ -1,11 +1,18 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Estúdio de Criação IA</title>
+    <title>Estúdio de Criação com Inteligência Artificial</title>
+    <meta name="description" content="Estúdio de Criação IA: Transforme suas ideias em design digital inovador com inteligência artificial." />
+    <meta name="keywords" content="estúdio de criação ia, criação com ia, design digital, inteligência artificial, conteúdo ia, marketing ia, gerador de imagem, gerador de vídeo, escritor de livros, soluções em ia" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Estúdio de Criação com Inteligência Artificial">
+    <meta property="og:description" content="Estúdio de Criação IA: Transforme suas ideias em design digital inovador com inteligência artificial.">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom scrollbar for webkit browsers */
@@ -22,6 +29,20 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #64748b; /* slate-500 */
         }
+        /* Skip link styles */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #6d28d9; /* purple-700 */
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
     </style>
   <script type="importmap">
 {
@@ -35,6 +56,7 @@
 </script>
 </head>
   <body class="bg-slate-900">
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Plan } from './types';
 import Sidebar from './components/Sidebar';
 import BookCreator from './components/BookCreator';
@@ -83,15 +83,27 @@ import CharacterBackstoryGenerator from './components/CharacterBackstoryGenerato
 import ToneAnalyzer from './components/ToneAnalyzer';
 import Auth from './components/Auth';
 import PricingPage from './components/PricingPage';
+import InitializationError from './components/InitializationError';
+import BlogPage from './components/BlogPage';
+import LandingPage from './components/LandingPage';
 
 
 const App: React.FC = () => {
   const [activeView, setActiveView] = useState<View>('chat');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userPlan, setUserPlan] = useState<Plan | null>(null);
+  const [showAuth, setShowAuth] = useState(false);
 
+  // Check for API key at the highest level. If it's missing, block the app.
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+      return <InitializationError error="Chave de API não encontrada. Por favor, verifique se a variável de ambiente API_KEY está configurada corretamente no seu ambiente de hospedagem (ex: Vercel)." />;
+  }
+  
   const renderActiveView = () => {
     switch (activeView) {
+      case 'blog_home':
+        return <BlogPage />;
       case 'chat':
         return <Chat />;
       case 'docschat':
@@ -254,9 +266,18 @@ const App: React.FC = () => {
         return <Chat />;
     }
   };
+  
+  const handleAuthSuccess = (plan: Plan | null) => {
+      setIsAuthenticated(true);
+      setUserPlan(plan);
+      setShowAuth(false); // Reset auth view on success
+  };
 
   if (!isAuthenticated) {
-    return <Auth onAuthSuccess={() => setIsAuthenticated(true)} />;
+    if (showAuth) {
+        return <Auth onAuthSuccess={handleAuthSuccess} />;
+    }
+    return <LandingPage onStart={() => setShowAuth(true)} />;
   }
 
   if (!userPlan) {
@@ -266,11 +287,14 @@ const App: React.FC = () => {
   return (
     <div className="flex h-screen bg-slate-900 text-slate-200 font-sans">
       <Sidebar activeView={activeView} setActiveView={setActiveView} userPlan={userPlan} />
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 p-4 flex items-center justify-between">
+      <main id="main-content" className="flex-1 flex flex-col overflow-hidden">
+        <header role="banner" className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 p-4 flex items-center justify-between">
             <h1 className="text-xl font-bold text-white flex items-center gap-3">
                 <LogoIcon />
-                Estúdio de Criação IA
+                <span>
+                    Estúdio de Criação IA 
+                    <span className="hidden sm:inline text-cyan-400 font-medium"> – Design Digital e Inteligência Artificial</span>
+                </span>
             </h1>
         </header>
         <div className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">

@@ -1,9 +1,9 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
+import { Chat as GeminiChat } from "@google/genai";
 import { ChatMessage } from '../types';
 import Loader from './Loader';
 import { LogoIcon, SendIcon, UserIcon } from './Icons';
+import * as geminiService from '../services/geminiService';
 
 const Chat: React.FC = () => {
     const [history, setHistory] = useState<ChatMessage[]>([]);
@@ -16,22 +16,15 @@ const Chat: React.FC = () => {
     useEffect(() => {
         const initChat = () => {
             try {
-                const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
-                const systemInstruction = "Você é um assistente de IA para o 'Estúdio de Criação IA'. Sua função é ajudar escritores a dar vida a mundos, personagens e narrativas épicas. Você pode ajudar com ideias, esboços, desenvolvimento de personagens e muito mais. O aplicativo também possui ferramentas para gerar imagens, vídeos e narrações de áudio. Você pode sugerir prompts para essas ferramentas, mas não pode gerá-los diretamente. Seja criativo, amigável e prestativo.";
-                
-                chatSession.current = ai.chats.create({
-                    model: 'gemini-2.5-flash',
-                    config: {
-                        systemInstruction: systemInstruction,
-                    },
-                });
+                // AI is initialized in App.tsx, we can safely create a session now.
+                chatSession.current = geminiService.createChatSession();
 
                 setHistory([{
                     role: 'model',
                     content: 'Olá! Como posso ajudar você a dar vida à sua próxima grande história hoje?'
                 }]);
             } catch (e: any) {
-                setError("Falha ao inicializar o assistente de IA. Verifique as configurações.");
+                setError("Falha ao inicializar a sessão de chat.");
                 console.error(e);
             }
         };

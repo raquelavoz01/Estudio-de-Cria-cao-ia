@@ -1,12 +1,22 @@
 import React from 'react';
 import { View, Plan } from './types';
-import { BookIcon, ImageIcon, VideoIcon, AudioIcon, ChatIcon, PortraitIcon, AvatarIcon, InteriorIcon, MagicIcon, MusicIcon, SoundIcon, DocsIcon, WritingIcon, SeoIcon, InstagramIcon, YouTubeIcon, LandingPageIcon, EmailIcon, ListIcon, CheckIcon, ShortenIcon, LightbulbIcon, CampaignIcon, TranslateIcon, ChildIcon, SummaryIcon, StrategyIcon, TikTokIcon, ResearchIcon, BioIcon, GoogleIcon, FacebookIcon, BriefcaseIcon, CalendarIcon, BedtimeIcon, PdfIcon, LotteryIcon, CharacterIcon, ToneIcon } from './components/Icons';
+import { BookIcon, ImageIcon, VideoIcon, AudioIcon, ChatIcon, PortraitIcon, AvatarIcon, InteriorIcon, MagicIcon, MusicIcon, SoundIcon, DocsIcon, WritingIcon, SeoIcon, InstagramIcon, YouTubeIcon, LandingPageIcon, EmailIcon, ListIcon, CheckIcon, ShortenIcon, LightbulbIcon, CampaignIcon, TranslateIcon, ChildIcon, SummaryIcon, StrategyIcon, TikTokIcon, ResearchIcon, BioIcon, GoogleIcon, FacebookIcon, BriefcaseIcon, CalendarIcon, BedtimeIcon, PdfIcon, LotteryIcon, CharacterIcon, ToneIcon, NewspaperIcon } from './components/Icons';
 
 export const NAV_ITEMS: ({ id: View; label: string; icon: React.ReactElement; plan: Plan } | { isSeparator: true; label: string })[] = [
   {
     id: 'chat',
     label: 'Chat IA',
     icon: <ChatIcon />,
+    plan: 'escritor',
+  },
+  {
+    isSeparator: true,
+    label: 'Conteúdo & Aprendizado',
+  },
+  {
+    id: 'blog_home',
+    label: 'Blog da IA',
+    icon: <NewspaperIcon />,
     plan: 'escritor',
   },
   {

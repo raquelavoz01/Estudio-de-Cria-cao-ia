@@ -43,7 +43,10 @@ const PricingPage: React.FC<PricingPageProps> = ({ onSelectPlan }) => {
               <TickItem>Brainstorming e Ideias</TickItem>
               <TickItem>Ferramentas de Diversão</TickItem>
             </ul>
-            <button onClick={() => onSelectPlan('escritor')} className="mt-auto w-full py-3 font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-500 rounded-lg hover:opacity-90 transition-opacity">
+            <button
+              onClick={() => onSelectPlan('escritor')} 
+              className="mt-auto block w-full py-3 font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-500 rounded-lg hover:opacity-90 transition-opacity"
+            >
               Começar com Escritor
             </button>
           </div>
@@ -63,7 +66,10 @@ const PricingPage: React.FC<PricingPageProps> = ({ onSelectPlan }) => {
               <TickItem>Ferramentas Avançadas de Marketing</TickItem>
               <TickItem>Geração de Músicas com IA</TickItem>
             </ul>
-            <button onClick={() => onSelectPlan('arquiteto')} className="mt-auto w-full py-3 font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-500 rounded-lg hover:opacity-90 transition-opacity">
+            <button
+              onClick={() => onSelectPlan('arquiteto')} 
+              className="mt-auto block w-full py-3 font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-500 rounded-lg hover:opacity-90 transition-opacity"
+            >
               Começar com Arquiteto
             </button>
           </div>
@@ -83,7 +89,10 @@ const PricingPage: React.FC<PricingPageProps> = ({ onSelectPlan }) => {
                <TickItem>Bate-papo com Arquivos (PDFs, Docs)</TickItem>
               <TickItem>Narrador de Áudio e Avatar Falante</TickItem>
             </ul>
-            <button onClick={() => onSelectPlan('mestre')} className="mt-auto w-full py-3 font-semibold text-white bg-gradient-to-r from-pink-600 to-red-500 rounded-lg hover:opacity-90 transition-opacity">
+            <button
+              onClick={() => onSelectPlan('mestre')} 
+              className="mt-auto block w-full py-3 font-semibold text-white bg-gradient-to-r from-pink-600 to-red-500 rounded-lg hover:opacity-90 transition-opacity"
+            >
               Seja um Mestre
             </button>
           </div>

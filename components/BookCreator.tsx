@@ -381,7 +381,7 @@ const BookCreator: React.FC = () => {
         </div>
 
       </div>
-      {error && <div className="mt-4 bg-red-500/20 text-red-300 p-3 rounded-lg">{error}</div>}
+      {error && <div role="alert" className="mt-4 bg-red-500/20 text-red-300 p-3 rounded-lg">{error}</div>}
     </div>
   );
 };

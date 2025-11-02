@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import * as geminiService from '../services/geminiService';
 import Loader from './Loader';
@@ -11,6 +10,7 @@ const ImageGenerator: React.FC = () => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const promptErrorId = "prompt-error";
 
   const handleGenerateImage = useCallback(async () => {
     if (!prompt) {
@@ -58,6 +58,8 @@ const ImageGenerator: React.FC = () => {
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Ex: um astronauta cavalgando um cavalo cósmico em uma nebulosa, arte digital épica"
           className="w-full h-24 p-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
+          aria-invalid={!!error}
+          aria-describedby={error ? promptErrorId : undefined}
         />
         <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
            <div className="flex items-center gap-4">
@@ -90,7 +92,7 @@ const ImageGenerator: React.FC = () => {
         </div>
       </div>
 
-      {error && <div className="bg-red-500/20 text-red-300 p-3 rounded-lg">{error}</div>}
+      {error && <div id={promptErrorId} role="alert" className="bg-red-500/20 text-red-300 p-3 rounded-lg">{error}</div>}
 
       <div className="bg-slate-800 p-6 rounded-xl shadow-lg min-h-[400px] flex flex-col items-center justify-center">
         {isLoading ? (

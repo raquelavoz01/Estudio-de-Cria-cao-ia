@@ -1,9 +1,9 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { GoogleGenAI, Chat as GeminiChat } from "@google/genai";
+import { Chat as GeminiChat, GoogleGenAI } from "@google/genai";
 import { ChatMessage } from '../types';
 import Loader from './Loader';
 import { LogoIcon, SendIcon, UserIcon, UploadIcon } from './Icons';
+import * as geminiService from '../services/geminiService';
 
 const ChatWithFiles: React.FC = () => {
     const [context, setContext] = useState('');
@@ -45,7 +45,12 @@ const ChatWithFiles: React.FC = () => {
         }
         setIsLoading(true);
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+            const apiKey = process.env.API_KEY;
+            if (!apiKey) {
+                throw new Error("Chave de API API_KEY não encontrada.");
+            }
+            const ai = new GoogleGenAI({ apiKey });
+
             const systemInstruction = `Você é um assistente de IA especialista em análise de texto. O usuário forneceu o seguinte documento como contexto. Todas as suas respostas devem ser baseadas EXCLUSIVAMENTE neste documento. Não use conhecimento externo. Se a resposta não estiver no documento, diga "A informação não foi encontrada no documento fornecido."
 
 Documento:
@@ -53,13 +58,13 @@ Documento:
 ${context}
 ---
 `;
-            
             chatSession.current = ai.chats.create({
                 model: 'gemini-2.5-flash',
                 config: {
                     systemInstruction: systemInstruction,
                 },
             });
+
 
             setHistory([{
                 role: 'model',

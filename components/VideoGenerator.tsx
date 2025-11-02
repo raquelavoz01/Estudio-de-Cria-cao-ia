@@ -17,17 +17,22 @@ const VideoGenerator: React.FC = () => {
     const [generatedVideo, setGeneratedVideo] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [apiKeySelected, setApiKeySelected] = useState(false);
     const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
+    const [isAiStudioEnv, setIsAiStudioEnv] = useState(false);
+    const [aistudioKeyRequired, setAistudioKeyRequired] = useState(false);
     
     useEffect(() => {
-        const checkApiKey = async () => {
-            const hasKey = await window.aistudio.hasSelectedApiKey();
-            setApiKeySelected(hasKey);
+        const checkEnv = async () => {
+            const inAiStudio = typeof window !== 'undefined' && !!window.aistudio;
+            setIsAiStudioEnv(inAiStudio);
+            if (inAiStudio) {
+                const hasKey = await window.aistudio.hasSelectedApiKey();
+                setAistudioKeyRequired(!hasKey);
+            }
         };
-        checkApiKey();
+        checkEnv();
     }, []);
-
+    
     useEffect(() => {
         let interval: number;
         if (isLoading) {
@@ -42,17 +47,12 @@ const VideoGenerator: React.FC = () => {
         return () => clearInterval(interval);
     }, [isLoading]);
 
-    const handleSelectKey = async () => {
-        await window.aistudio.openSelectKey();
-        // Assume success to avoid race condition and re-render UI
-        setApiKeySelected(true);
-    };
-
     const handleGenerateVideo = useCallback(async () => {
         if (!prompt) {
             setError('Por favor, insira uma descrição para o vídeo.');
             return;
         }
+        
         setIsLoading(true);
         setError(null);
         setGeneratedVideo(null);
@@ -61,17 +61,19 @@ const VideoGenerator: React.FC = () => {
             const videoUrl = await geminiService.generateVideo(prompt);
             setGeneratedVideo(videoUrl);
         } catch (e: any) {
+            // A verificação principal de erro de chave já é feita em App.tsx
+            // Esta é uma verificação secundária para o caso específico de chave inválida no AI Studio
             let message = 'Falha ao gerar o vídeo. Tente novamente.';
-            if (e.message && e.message.includes("Requested entity was not found")) {
-                message = "Chave de API inválida. Por favor, selecione uma chave válida.";
-                setApiKeySelected(false);
+            if (isAiStudioEnv && e.message && e.message.includes("Requested entity was not found")) {
+                message = "Sua Chave de API parece ser inválida. Por favor, selecione uma chave novamente.";
+                setAistudioKeyRequired(true);
             }
             setError(message);
             console.error(e);
         } finally {
             setIsLoading(false);
         }
-    }, [prompt]);
+    }, [prompt, isAiStudioEnv]);
     
     const handleDownloadVideo = () => {
       if (!generatedVideo) return;
@@ -83,21 +85,40 @@ const VideoGenerator: React.FC = () => {
       document.body.removeChild(a);
     };
 
-    if (!apiKeySelected) {
+    const handleSelectApiKey = async () => {
+        if (isAiStudioEnv && window.aistudio) {
+            try {
+                await window.aistudio.openSelectKey();
+                setAistudioKeyRequired(false);
+                setError(null);
+            } catch (err) {
+                setError("Não foi possível abrir o seletor de Chave de API.");
+                console.error(err);
+            }
+        }
+    };
+    
+    // Mostra a tela de seleção de chave APENAS se estiver no ambiente AI Studio e a chave não tiver sido selecionada.
+    if (aistudioKeyRequired) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-                <div className="bg-slate-800 p-8 rounded-xl shadow-lg max-w-md">
+            <div className="space-y-6 max-w-4xl mx-auto text-center">
+                <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
                     <h2 className="text-2xl font-bold mb-4 text-white">Chave de API Necessária</h2>
-                    <p className="text-slate-400 mb-6">Para usar o Gerador de Vídeo, você precisa selecionar uma chave de API do Google AI Studio.</p>
-                    <p className="text-sm text-slate-500 mb-6">Taxas podem ser aplicadas. Consulte a <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">documentação de preços</a> para mais detalhes.</p>
-                    <button onClick={handleSelectKey} className="w-full px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors shadow-md">
+                    <p className="text-slate-400 mb-4">Para usar o Gerador de Vídeo, você precisa selecionar uma chave de API do Google AI Studio.</p>
+                    <p className="text-slate-400 mb-6 text-sm">Os impostos podem ser aplicados. Consulte a <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline">documentação de preços</a> para mais detalhes.</p>
+                    <button
+                        onClick={handleSelectApiKey}
+                        className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors shadow-md"
+                    >
                         Selecionar Chave de API
                     </button>
+                    {error && <div className="mt-4 bg-red-500/20 text-red-300 p-3 rounded-lg">{error}</div>}
                 </div>
             </div>
         );
     }
 
+    // Para usuários na Vercel, ou usuários no AI Studio que já selecionaram a chave, mostra o gerador.
     return (
         <div className="space-y-6 max-w-4xl mx-auto">
             <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
