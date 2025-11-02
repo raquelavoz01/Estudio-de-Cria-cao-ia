@@ -95,9 +95,10 @@ const App: React.FC = () => {
   const [showAuth, setShowAuth] = useState(false);
 
   // Check for API key at the highest level. If it's missing, block the app.
-  const apiKey = process.env.API_KEY;
+  // This checks for the Vercel key first, then falls back to the local dev key.
+  const apiKey = process.env.VITE_API_KEY || process.env.API_KEY;
   if (!apiKey) {
-      return <InitializationError error="Chave de API não encontrada. Por favor, verifique se a variável de ambiente API_KEY está configurada corretamente no seu ambiente de hospedagem (ex: Vercel)." />;
+      return <InitializationError error="Nenhuma Chave de API foi encontrada." />;
   }
   
   const renderActiveView = () => {

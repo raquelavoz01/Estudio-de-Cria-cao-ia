@@ -41,10 +41,10 @@ const handleGeminiError = (error: any, context: string): string => {
         return messageToTest; // Passa este erro específico para o componente de vídeo lidar com ele
     }
     if (messageToTest.includes('API key expired')) {
-        return 'Sua Chave de API expirou. Por favor, crie uma nova chave no Google AI Studio e atualize a variável de ambiente API_KEY.';
+        return 'Sua Chave de API expirou. Por favor, crie uma nova chave no Google AI Studio e atualize sua variável de ambiente.';
     }
     if (messageToTest.includes('API_KEY_INVALID') || messageToTest.includes('API key not valid')) {
-        return 'Sua Chave de API é inválida. Verifique se você a copiou corretamente do Google AI Studio e atualize a variável de ambiente API_KEY.';
+        return 'Sua Chave de API é inválida. Verifique se você a copiou corretamente do Google AI Studio e atualize sua variável de ambiente.';
     }
     if (messageToTest.includes('permission denied')) {
         return 'Permissão negada. Verifique se sua Chave de API tem as permissões necessárias para usar o modelo Gemini.';
@@ -66,9 +66,9 @@ const handleGeminiError = (error: any, context: string): string => {
 
 // Helper function to get a fresh AI client instance
 const getAiClient = (): GoogleGenAI => {
-    const apiKey = process.env.API_KEY;
+    const apiKey = process.env.VITE_API_KEY || process.env.API_KEY;
     if (!apiKey) {
-        throw new Error("Chave de API não encontrada. Por favor, verifique se a variável de ambiente API_KEY está configurada corretamente.");
+        throw new Error("Chave de API não encontrada. Configure VITE_API_KEY (para produção) ou API_KEY (para desenvolvimento local).");
     }
     return new GoogleGenAI({ apiKey });
 };
@@ -208,7 +208,10 @@ export const generatePortrait = async (base64ImageData: string, mimeType: string
 export const generateVideo = async (prompt: string): Promise<string> => {
     try {
         const ai = getAiClient(); // Uses the same helper for consistency
-        const apiKey = process.env.API_KEY; // Still need key for fetch
+        const apiKey = process.env.VITE_API_KEY || process.env.API_KEY; 
+        if (!apiKey) {
+            throw new Error("A chave de API é necessária para baixar o vídeo gerado.");
+        }
         
         let operation = await ai.models.generateVideos({
             model: 'veo-3.1-fast-generate-preview',

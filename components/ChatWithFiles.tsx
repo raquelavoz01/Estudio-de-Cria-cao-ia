@@ -45,9 +45,9 @@ const ChatWithFiles: React.FC = () => {
         }
         setIsLoading(true);
         try {
-            const apiKey = process.env.API_KEY;
+            const apiKey = process.env.VITE_API_KEY || process.env.API_KEY;
             if (!apiKey) {
-                throw new Error("Chave de API API_KEY não encontrada.");
+                throw new Error("Nenhuma Chave de API foi encontrada.");
             }
             const ai = new GoogleGenAI({ apiKey });
 
