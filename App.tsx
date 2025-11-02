@@ -1,91 +1,95 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, Suspense, lazy } from 'react';
 import { View, Plan } from './types';
 import Sidebar from './components/Sidebar';
-import BookCreator from './components/BookCreator';
-import ImageGenerator from './components/ImageGenerator';
-import VideoGenerator from './components/VideoGenerator';
-import AudioNarrator from './components/AudioNarrator';
-import Chat from './components/Chat';
-import PortraitStudio from './components/PortraitStudio';
-import TalkingAvatar from './components/TalkingAvatar';
-import InteriorDesigner from './components/InteriorDesigner';
-import MagicUpscaler from './components/MagicUpscaler';
-import MusicGenerator from './components/MusicGenerator';
-import SoundEffectGenerator from './components/SoundEffectGenerator';
-import ChatWithFiles from './components/ChatWithFiles';
 import { LogoIcon } from './components/Icons';
-import ArticleWriter from './components/ArticleWriter';
-import BlogWorkflow from './components/BlogWorkflow';
-import InstagramCaption from './components/InstagramCaption';
-import ParagraphWriter from './components/ParagraphWriter';
-import SeoTools from './components/SeoTools';
-import YouTubeToArticle from './components/YouTubeToArticle';
-import LandingPageCopy from './components/LandingPageCopy';
-import EmailGenerator from './components/EmailGenerator';
-import TopicGenerator from './components/TopicGenerator';
-import GrammarChecker from './components/GrammarChecker';
-import TextShortener from './components/TextShortener';
-import BrainstormingTool from './components/BrainstormingTool';
-import BlogTitleGenerator from './components/BlogTitleGenerator';
-import BlogOutlineGenerator from './components/BlogOutlineGenerator';
-import BlogIntroGenerator from './components/BlogIntroGenerator';
-import BlogConclusionGenerator from './components/BlogConclusionGenerator';
-import MarketingCampaignGenerator from './components/MarketingCampaignGenerator';
-import MarketingEmailGenerator from './components/MarketingEmailGenerator';
-import AdCopyGenerator from './components/AdCopyGenerator';
-import UniversalTranslator from './components/UniversalTranslator';
-import ExplainLikeImFive from './components/ExplainLikeImFive';
-import MarketingStrategyGenerator from './components/MarketingStrategyGenerator';
-import SummaryGenerator from './components/SummaryGenerator';
-import YouTubeDescriptionGenerator from './components/YouTubeDescriptionGenerator';
-import YouTubeTitleGenerator from './components/YouTubeTitleGenerator';
-import YouTubeIdeaGenerator from './components/YouTubeIdeaGenerator';
-import VideoScriptOutlineGenerator from './components/VideoScriptOutlineGenerator';
-import TikTokCaptionGenerator from './components/TikTokCaptionGenerator';
-import TikTokHashtagGenerator from './components/TikTokHashtagGenerator';
-import ResearchPaperGenerator from './components/ResearchPaperGenerator';
-import QuestionAnswerer from './components/QuestionAnswerer';
-import SeoContentBrief from './components/SeoContentBrief';
-import AboutMeGenerator from './components/AboutMeGenerator';
-import ProBioGenerator from './components/ProBioGenerator';
-import GoogleAdsHeadlines from './components/GoogleAdsHeadlines';
-import GoogleAdsDescriptions from './components/GoogleAdsDescriptions';
-import GmbProductDescription from './components/GmbProductDescription';
-import GmbPostGenerator from './components/GmbPostGenerator';
-import FacebookAdsHeadlines from './components/FacebookAdsHeadlines';
-import FacebookAdsPrimaryText from './components/FacebookAdsPrimaryText';
-import SocialPostGenerator from './components/SocialPostGenerator';
-import AiSongGenerator from './components/AiSongGenerator';
-import SongIdeaGenerator from './components/SongIdeaGenerator';
-import LyricsGenerator from './components/LyricsGenerator';
-import BookTitleGenerator from './components/BookTitleGenerator';
-import BookOutlineGenerator from './components/BookOutlineGenerator';
-import ChapterGenerator from './components/ChapterGenerator';
-import BookSummarizer from './components/BookSummarizer';
-import InstagramBioGenerator from './components/InstagramBioGenerator';
-import ReelsScriptGenerator from './components/ReelsScriptGenerator';
-import ReelsCaptionGenerator from './components/ReelsCaptionGenerator';
-import ReelsIdeaGenerator from './components/ReelsIdeaGenerator';
-import InstagramHashtagGenerator from './components/InstagramHashtagGenerator';
-import InstagramThreadGenerator from './components/InstagramThreadGenerator';
-import ContentCalendarGenerator from './components/ContentCalendarGenerator';
-import VideoPromptGenerator from './components/VideoPromptGenerator';
-import ImageDescriptionGenerator from './components/ImageDescriptionGenerator';
-import PdfSummarizer from './components/PdfSummarizer';
-import LotteryNumberGenerator from './components/LotteryNumberGenerator';
-import PowerballGenerator from './components/PowerballGenerator';
-import MegaMillionsGenerator from './components/MegaMillionsGenerator';
-import BedtimeStoryGenerator from './components/BedtimeStoryGenerator';
-import LullabyGenerator from './components/LullabyGenerator';
-import CharacterNameGenerator from './components/CharacterNameGenerator';
-import CharacterDescriptionGenerator from './components/CharacterDescriptionGenerator';
-import CharacterBackstoryGenerator from './components/CharacterBackstoryGenerator';
-import ToneAnalyzer from './components/ToneAnalyzer';
 import Auth from './components/Auth';
 import PricingPage from './components/PricingPage';
 import InitializationError from './components/InitializationError';
-import BlogPage from './components/BlogPage';
 import LandingPage from './components/LandingPage';
+import Loader from './components/Loader';
+
+// Lazy load all feature components for code splitting and better performance
+const BlogPage = lazy(() => import('./components/BlogPage'));
+const Chat = lazy(() => import('./components/Chat'));
+const ChatWithFiles = lazy(() => import('./components/ChatWithFiles'));
+const BookCreator = lazy(() => import('./components/BookCreator'));
+const ImageGenerator = lazy(() => import('./components/ImageGenerator'));
+const PortraitStudio = lazy(() => import('./components/PortraitStudio'));
+const MagicUpscaler = lazy(() => import('./components/MagicUpscaler'));
+const InteriorDesigner = lazy(() => import('./components/InteriorDesigner'));
+const VideoGenerator = lazy(() => import('./components/VideoGenerator'));
+const TalkingAvatar = lazy(() => import('./components/TalkingAvatar'));
+const AudioNarrator = lazy(() => import('./components/AudioNarrator'));
+const MusicGenerator = lazy(() => import('./components/MusicGenerator'));
+const SoundEffectGenerator = lazy(() => import('./components/SoundEffectGenerator'));
+const ArticleWriter = lazy(() => import('./components/ArticleWriter'));
+const BlogWorkflow = lazy(() => import('./components/BlogWorkflow'));
+const InstagramCaption = lazy(() => import('./components/InstagramCaption'));
+const ParagraphWriter = lazy(() => import('./components/ParagraphWriter'));
+const SeoTools = lazy(() => import('./components/SeoTools'));
+const YouTubeToArticle = lazy(() => import('./components/YouTubeToArticle'));
+const LandingPageCopy = lazy(() => import('./components/LandingPageCopy'));
+const EmailGenerator = lazy(() => import('./components/EmailGenerator'));
+const TopicGenerator = lazy(() => import('./components/TopicGenerator'));
+const GrammarChecker = lazy(() => import('./components/GrammarChecker'));
+const TextShortener = lazy(() => import('./components/TextShortener'));
+const BrainstormingTool = lazy(() => import('./components/BrainstormingTool'));
+const BlogTitleGenerator = lazy(() => import('./components/BlogTitleGenerator'));
+const BlogOutlineGenerator = lazy(() => import('./components/BlogOutlineGenerator'));
+const BlogIntroGenerator = lazy(() => import('./components/BlogIntroGenerator'));
+const BlogConclusionGenerator = lazy(() => import('./components/BlogConclusionGenerator'));
+const MarketingCampaignGenerator = lazy(() => import('./components/MarketingCampaignGenerator'));
+const MarketingEmailGenerator = lazy(() => import('./components/MarketingEmailGenerator'));
+const AdCopyGenerator = lazy(() => import('./components/AdCopyGenerator'));
+const UniversalTranslator = lazy(() => import('./components/UniversalTranslator'));
+const ExplainLikeImFive = lazy(() => import('./components/ExplainLikeImFive'));
+const MarketingStrategyGenerator = lazy(() => import('./components/MarketingStrategyGenerator'));
+const SummaryGenerator = lazy(() => import('./components/SummaryGenerator'));
+const YouTubeDescriptionGenerator = lazy(() => import('./components/YouTubeDescriptionGenerator'));
+const YouTubeTitleGenerator = lazy(() => import('./components/YouTubeTitleGenerator'));
+const YouTubeIdeaGenerator = lazy(() => import('./components/YouTubeIdeaGenerator'));
+const VideoScriptOutlineGenerator = lazy(() => import('./components/VideoScriptOutlineGenerator'));
+const TikTokCaptionGenerator = lazy(() => import('./components/TikTokCaptionGenerator'));
+const TikTokHashtagGenerator = lazy(() => import('./components/TikTokHashtagGenerator'));
+const ResearchPaperGenerator = lazy(() => import('./components/ResearchPaperGenerator'));
+const QuestionAnswerer = lazy(() => import('./components/QuestionAnswerer'));
+const SeoContentBrief = lazy(() => import('./components/SeoContentBrief'));
+const AboutMeGenerator = lazy(() => import('./components/AboutMeGenerator'));
+const ProBioGenerator = lazy(() => import('./components/ProBioGenerator'));
+const GoogleAdsHeadlines = lazy(() => import('./components/GoogleAdsHeadlines'));
+const GoogleAdsDescriptions = lazy(() => import('./components/GoogleAdsDescriptions'));
+const GmbProductDescription = lazy(() => import('./components/GmbProductDescription'));
+const GmbPostGenerator = lazy(() => import('./components/GmbPostGenerator'));
+const FacebookAdsHeadlines = lazy(() => import('./components/FacebookAdsHeadlines'));
+const FacebookAdsPrimaryText = lazy(() => import('./components/FacebookAdsPrimaryText'));
+const SocialPostGenerator = lazy(() => import('./components/SocialPostGenerator'));
+const AiSongGenerator = lazy(() => import('./components/AiSongGenerator'));
+const SongIdeaGenerator = lazy(() => import('./components/SongIdeaGenerator'));
+const LyricsGenerator = lazy(() => import('./components/LyricsGenerator'));
+const BookTitleGenerator = lazy(() => import('./components/BookTitleGenerator'));
+const BookOutlineGenerator = lazy(() => import('./components/BookOutlineGenerator'));
+const ChapterGenerator = lazy(() => import('./components/ChapterGenerator'));
+const BookSummarizer = lazy(() => import('./components/BookSummarizer'));
+const InstagramBioGenerator = lazy(() => import('./components/InstagramBioGenerator'));
+const ReelsScriptGenerator = lazy(() => import('./components/ReelsScriptGenerator'));
+const ReelsCaptionGenerator = lazy(() => import('./components/ReelsCaptionGenerator'));
+const ReelsIdeaGenerator = lazy(() => import('./components/ReelsIdeaGenerator'));
+const InstagramHashtagGenerator = lazy(() => import('./components/InstagramHashtagGenerator'));
+const InstagramThreadGenerator = lazy(() => import('./components/InstagramThreadGenerator'));
+const ContentCalendarGenerator = lazy(() => import('./components/ContentCalendarGenerator'));
+const VideoPromptGenerator = lazy(() => import('./components/VideoPromptGenerator'));
+const ImageDescriptionGenerator = lazy(() => import('./components/ImageDescriptionGenerator'));
+const PdfSummarizer = lazy(() => import('./components/PdfSummarizer'));
+const LotteryNumberGenerator = lazy(() => import('./components/LotteryNumberGenerator'));
+const PowerballGenerator = lazy(() => import('./components/PowerballGenerator'));
+const MegaMillionsGenerator = lazy(() => import('./components/MegaMillionsGenerator'));
+const BedtimeStoryGenerator = lazy(() => import('./components/BedtimeStoryGenerator'));
+const LullabyGenerator = lazy(() => import('./components/LullabyGenerator'));
+const CharacterNameGenerator = lazy(() => import('./components/CharacterNameGenerator'));
+const CharacterDescriptionGenerator = lazy(() => import('./components/CharacterDescriptionGenerator'));
+const CharacterBackstoryGenerator = lazy(() => import('./components/CharacterBackstoryGenerator'));
+const ToneAnalyzer = lazy(() => import('./components/ToneAnalyzer'));
 
 
 const App: React.FC = () => {
@@ -285,6 +289,15 @@ const App: React.FC = () => {
     return <PricingPage onSelectPlan={(plan) => setUserPlan(plan)} />;
   }
 
+  const suspenseFallback = (
+    <div className="flex justify-center items-center h-full">
+      <div className="text-center">
+        <Loader />
+        <p className="mt-2 text-slate-400">Carregando ferramenta...</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex h-screen bg-slate-900 text-slate-200 font-sans">
       <Sidebar activeView={activeView} setActiveView={setActiveView} userPlan={userPlan} />
@@ -299,7 +312,9 @@ const App: React.FC = () => {
             </h1>
         </header>
         <div className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
-          {renderActiveView()}
+          <Suspense fallback={suspenseFallback}>
+            {renderActiveView()}
+          </Suspense>
         </div>
       </main>
     </div>

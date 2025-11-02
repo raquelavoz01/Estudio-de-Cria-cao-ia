@@ -1,24 +1,28 @@
 import React from 'react';
+import GenericTool from './GenericTool';
+import * as geminiService from '../services/geminiService';
 
 const SummaryGenerator: React.FC = () => {
-    return (
-        <div className="space-y-6 max-w-4xl mx-auto">
-            <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-white">Gerador de Resumos</h2>
-                <p className="text-slate-400 mb-4">Gere um resumo acadêmico conciso e profissional a partir do contexto e dos destaques da sua pesquisa.</p>
-                <textarea
-                    placeholder="Cole seu texto ou artigo aqui..."
-                    className="w-full h-40 p-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
-                />
-                <div className="mt-4 flex justify-end">
-                    <button
-                        className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors shadow-md"
-                    >
-                        Gerar Resumo
-                    </button>
-                </div>
-            </div>
+    const generateAction = (prompt: string) => {
+        return geminiService.generateGenericText(`Gere um resumo acadêmico conciso e profissional do seguinte texto:\n\n"${prompt}"`);
+    };
+
+    const renderResult = (result: string) => (
+        <div className="prose prose-invert max-w-none text-slate-300 whitespace-pre-wrap">
+           {result}
         </div>
+    );
+
+    return (
+        <GenericTool
+            title="Gerador de Resumos"
+            description="Gere um resumo acadêmico conciso e profissional a partir do contexto e dos destaques da sua pesquisa."
+            inputLabel="Texto para resumir"
+            inputPlaceholder="Cole seu texto ou artigo aqui..."
+            buttonText="Gerar Resumo"
+            generateAction={generateAction}
+            renderResult={renderResult}
+        />
     );
 };
 

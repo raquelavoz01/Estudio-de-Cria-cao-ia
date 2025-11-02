@@ -1,24 +1,28 @@
 import React from 'react';
+import GenericTool from './GenericTool';
+import * as geminiService from '../services/geminiService';
 
 const GmbPostGenerator: React.FC = () => {
-    return (
-        <div className="space-y-6 max-w-4xl mx-auto">
-            <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-white">Postagem do Google Meu Negócio</h2>
-                <p className="text-slate-400 mb-4">Gerar atualizações de postagens de novidades para o Google Meu Negócio.</p>
-                <textarea
-                    placeholder="O que você quer anunciar? (Ex: promoção de fim de semana, novo item no menu)"
-                    className="w-full h-24 p-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
-                />
-                <div className="mt-4 flex justify-end">
-                    <button
-                        className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors shadow-md"
-                    >
-                        Gerar Postagem
-                    </button>
-                </div>
-            </div>
+    const generateAction = (prompt: string) => {
+        return geminiService.generateGenericText(`Crie uma postagem de atualização para o Google Meu Negócio sobre a seguinte novidade: "${prompt}". A postagem deve ser concisa, informativa e incluir uma chamada para ação, se aplicável.`);
+    };
+
+    const renderResult = (result: string) => (
+        <div className="prose prose-invert max-w-none text-slate-300 whitespace-pre-wrap">
+           {result}
         </div>
+    );
+
+    return (
+        <GenericTool
+            title="Postagem do Google Meu Negócio"
+            description="Gerar atualizações de postagens de novidades para o Google Meu Negócio."
+            inputLabel="O que você quer anunciar?"
+            inputPlaceholder="Ex: promoção de fim de semana, novo item no menu"
+            buttonText="Gerar Postagem"
+            generateAction={generateAction}
+            renderResult={renderResult}
+        />
     );
 };
 

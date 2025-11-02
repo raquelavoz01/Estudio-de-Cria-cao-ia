@@ -1160,3 +1160,37 @@ export const generateCharacterDescription = async (name: string, archetype: stri
         throw new Error(handleGeminiError(e, 'gerar a descrição do personagem'));
     }
 };
+
+// --- Funções para Ferramentas Genéricas ---
+
+export const generateGenericText = async (prompt: string, model: 'gemini-2.5-flash' | 'gemini-2.5-pro' = 'gemini-2.5-flash'): Promise<string> => {
+    const ai = getAiClient();
+    try {
+        const response = await ai.models.generateContent({ model, contents: prompt });
+        return response.text;
+    } catch (e) {
+        throw new Error(handleGeminiError(e, 'geração de texto genérico'));
+    }
+};
+
+export const generateGenericJsonArray = async (prompt: string): Promise<string[]> => {
+    const ai = getAiClient();
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: { type: Type.ARRAY, items: { type: Type.STRING } }
+            }
+        });
+        try {
+            return JSON.parse(response.text.trim());
+        } catch (e) {
+            console.error("Falha ao analisar a resposta JSON do Gemini (array genérico):", response.text);
+            throw new Error("A IA retornou uma resposta em formato de array inválido.");
+        }
+    } catch(e) {
+        throw new Error(handleGeminiError(e, 'geração de array genérico'));
+    }
+};

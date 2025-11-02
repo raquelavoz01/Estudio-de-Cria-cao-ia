@@ -1,24 +1,28 @@
 import React from 'react';
+import GenericTool from './GenericTool';
+import * as geminiService from '../services/geminiService';
 
 const ToneAnalyzer: React.FC = () => {
-    return (
-        <div className="space-y-6 max-w-4xl mx-auto">
-            <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-white">Analisador de Tom de Texto</h2>
-                <p className="text-slate-400 mb-4">Analise o tom de um texto. Descubra se é positivo, negativo, neutro, formal, informal, etc.</p>
-                <textarea
-                    placeholder="Cole seu texto aqui para analisar o tom..."
-                    className="w-full h-24 p-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
-                />
-                <div className="mt-4 flex justify-end">
-                    <button
-                        className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors shadow-md"
-                    >
-                        Analisar Tom
-                    </button>
-                </div>
-            </div>
+    const generateAction = (prompt: string) => {
+        return geminiService.generateGenericText(`Analise o tom do seguinte texto. Descreva o tom principal (ex: Positivo, Negativo, Neutro) e quaisquer tons secundários (ex: Formal, Otimista, Cético):\n\n"${prompt}"`);
+    };
+
+    const renderResult = (result: string) => (
+         <div className="prose prose-invert max-w-none text-slate-300 whitespace-pre-wrap">
+           {result}
         </div>
+    );
+
+    return (
+        <GenericTool
+            title="Analisador de Tom de Texto"
+            description="Analise o tom de um texto. Descubra se é positivo, negativo, neutro, formal, informal, etc."
+            inputLabel="Texto para analisar"
+            inputPlaceholder="Cole seu texto aqui para analisar o tom..."
+            buttonText="Analisar Tom"
+            generateAction={generateAction}
+            renderResult={renderResult}
+        />
     );
 };
 

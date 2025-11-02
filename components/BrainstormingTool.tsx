@@ -1,24 +1,31 @@
 import React from 'react';
+import GenericTool from './GenericTool';
+import * as geminiService from '../services/geminiService';
 
 const BrainstormingTool: React.FC = () => {
-    return (
-        <div className="space-y-6 max-w-4xl mx-auto">
-            <div className="bg-slate-800 p-6 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-white">Ferramenta de Brainstorming</h2>
-                <p className="text-slate-400 mb-4">Gere soluções e ideias criativas para qualquer problema.</p>
-                <textarea
-                    placeholder="Ex: ideias de nomes para uma nova cafeteria com tema de espaço"
-                    className="w-full h-24 p-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
-                />
-                <div className="mt-4 flex justify-end">
-                    <button
-                        className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors shadow-md"
-                    >
-                        Gerar Ideias
-                    </button>
-                </div>
-            </div>
+    const generateAction = (prompt: string) => {
+        return geminiService.generateGenericJsonArray(`Gere uma lista de 10 ideias criativas de brainstorming sobre o seguinte tópico: "${prompt}"`);
+    };
+
+    const renderResult = (result: string[]) => (
+        <div>
+            <h3 className="text-xl font-bold text-purple-300 mb-2">Ideias Geradas</h3>
+            <ul className="list-disc list-inside space-y-2 text-slate-300">
+                {result.map((item, i) => <li key={i}>{item}</li>)}
+            </ul>
         </div>
+    );
+
+    return (
+        <GenericTool
+            title="Ferramenta de Brainstorming"
+            description="Gere soluções e ideias criativas para qualquer problema."
+            inputLabel="Tópico para brainstorming"
+            inputPlaceholder="Ex: ideias de nomes para uma nova cafeteria com tema de espaço"
+            buttonText="Gerar Ideias"
+            generateAction={generateAction}
+            renderResult={renderResult}
+        />
     );
 };
 
